@@ -28,7 +28,7 @@ If everything went fine, you should see something like this:
 ```bash
 $ ./pyRemoteControl.py
    Xlib.protocol.request.QueryExtension
-   pyRemoteControl version v1.0 - running on IP: 192.168.1.32
+   pyRemoteControl version v1.0
    Waiting for connection...
 ```
 
