@@ -54,59 +54,9 @@ class Controller:
     fake_input(self.disp, X.KeyPress, keycode)
     self.disp.sync()
 
-    ##Search for the focused window
-    #self.wnd = self.disp.get_input_focus().focus
-
-    #if (self.wnd) == None:
-    #  print 'Error assigning the focused window! Existing...'
-    #  os._exit(0)
-
-    #self.keyevtpress = event.KeyPress(
-    #  type = X.KeyPress,
-    #  display = self.disp, 
-    #  detail = keycode,
-    #  time = X.CurrentTime,
-    #  root = self.root,
-    #  window = self.wnd,
-    #  child = X.NONE,
-    #  root_x = 1,
-    #  root_y = 1,
-    #  event_x = 1,
-    #  event_y = 1,
-    #  state = 0,
-    #  same_screen = 1,
-    #)
-    #self.disp.send_event(self.wnd, self.keyevtpress, propagate = True)
-    #self.disp.flush()
-
   def release_button(self, keycode):
     fake_input(self.disp, X.KeyRelease, keycode)
     self.disp.sync()
-
-    ##Search for the focused window
-    #self.wnd = self.disp.get_input_focus().focus
-
-    #if (self.wnd) == None:
-    #  print 'Error assigning the focused window! Existing...'
-    #  os._exit(0)
-
-    #self.keyevtrelease = event.KeyRelease(
-    #  type = X.KeyRelease,
-    #  display = self.disp, 
-    #  detail = keycode,
-    #  time = X.CurrentTime,
-    #  root = self.root,
-    #  window = self.wnd,
-    #  child = X.NONE,
-    #  root_x = 1,
-    #  root_y = 1,
-    #  event_x = 1,
-    #  event_y = 1,
-    #  state = 0,
-    #  same_screen = 1,
-    #)
-    #self.disp.send_event(self.wnd, self.keyevtrelease, propagate = True)
-    #self.disp.flush()
 
   def move_mouse(self, deltaX, deltaY):
     self.disp.warp_pointer(deltaX*MOUSE_SENSIVITY, deltaY*MOUSE_SENSIVITY)
