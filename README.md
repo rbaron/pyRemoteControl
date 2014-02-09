@@ -6,7 +6,7 @@ pyRemoteControl is a remote control server for interacting with your X11 session
 Installation and usage
 ----------------------
 
-Download the zip file, extract it and run the `pyRemoteControl.py` python script. It should be waiting for a conection.
+Download the zip file, extract it and run the `pyRemoteControl.py` python script. It should be waiting for a connection.
 
 If you would like to automate this process, copy and paste the following lines on a terminal:
 
