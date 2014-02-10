@@ -26,8 +26,16 @@ class Server:
     # if they're not available, receive the max possible and then
     # receive on at a time until PACKET_SIZE
     n = self.clientsock.recv_into(self.message, PACKET_SIZE)
+    bytes_received = n
+
+    if n == 0:
+      raise socket.error("Client disconnected")
 
     while(n<PACKET_SIZE):
-      self.clientsock.recv_into(self.message, 1)
-      n = n+1
+      n = self.clientsock.recv_into(self.message, 1)
+
+      if n == 0:
+        raise socket.error("Client disconnected.")
+      else:
+        bytes_received = bytes_received + n
 

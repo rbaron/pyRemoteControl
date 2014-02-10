@@ -25,7 +25,7 @@ while True:
       srv.receive()
 
   except socket.error, e:
-    print "pyRemoteControl: Socket exception ("+str(e)+"). Re-accept()'ing."
+    print "pyRemoteControl: "+str(e)+". Waiting for connection..."
 
 
 print "pyRemoteControl: clean exit."
