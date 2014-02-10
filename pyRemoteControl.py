@@ -21,7 +21,7 @@ while True:
     srv.receive()
 
     while(len(srv.message) > 0):
-      ctrl.handle_message(srv.message)
+      ctrl.handle_message(str(srv.message))
       srv.receive()
 
   except socket.error, e:

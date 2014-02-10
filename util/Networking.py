@@ -2,7 +2,7 @@ import socket
 
 HOST = ''
 PORT = 30667
-BUFFERSIZE = 17 
+PACKET_SIZE = 16
 
 class Server:
   def __init__(self):
@@ -17,5 +17,17 @@ class Server:
   def accept(self):
     (self.clientsock, self.clientaddr) = self.sock.accept()
 
+  # Receive exactly PACKET_SIZE bytes
   def receive(self):
-    self.message = self.clientsock.recv(BUFFERSIZE)
+
+    self.message = bytearray(PACKET_SIZE)
+
+    # A little optimization: try to receive 16 bytes at once,
+    # if they're not available, receive the max possible and then
+    # receive on at a time until PACKET_SIZE
+    n = self.clientsock.recv_into(self.message, PACKET_SIZE)
+
+    while(n<PACKET_SIZE):
+      self.clientsock.recv_into(self.message, 1)
+      n = n+1
+
