@@ -122,7 +122,7 @@ class Controller:
 
     try:
 
-      protocol = ord(message[0]);
+      protocol = message[0];
 
       # Mouse movement
       if(protocol == 0x01):
@@ -132,17 +132,17 @@ class Controller:
         #print 'Bytes (dy): '+hex(ord(message[5]))+'  '+hex(ord(message[6]))+' '+hex(ord(message[7]))+' '+hex(ord(message[8]))
 
         # Java signed byte trick
-        if(ord(message[1]) >= 127):
-          dx = (ord(message[1])<<24)+(ord(message[2])<<16)+(ord(message[3])<<8)+(ord(message[4])) - (1<<32)
+        if(message[1] >= 127):
+          dx = (message[1]<<24)+(message[2]<<16)+(message[3]<<8)+(message[4]) - (1<<32)
         else:
-          dx = (ord(message[1])<<24)+(ord(message[2])<<16)+(ord(message[3])<<8)+(ord(message[4]))
+          dx = (message[1]<<24)+(message[2]<<16)+(message[3]<<8)+(message[4])
             
-        if(ord(message[5]) >= 127):
-          dy = (ord(message[5])<<24)+(ord(message[6])<<16)+(ord(message[7])<<8)+(ord(message[8])) - (1<<32)
+        if(message[5] >= 127):
+          dy = (message[5]<<24)+(message[6]<<16)+(message[7]<<8)+(message[8]) - (1<<32)
         else:
-          dy = (ord(message[5])<<24)+(ord(message[6])<<16)+(ord(message[7])<<8)+(ord(message[8]))
+          dy = (message[5]<<24)+(message[6]<<16)+(message[7]<<8)+(message[8])
 
-        print 'dx: '+str(dx)+' dy: '+str(dy)
+        #print 'dx: '+str(dx)+' dy: '+str(dy)
 
         self.move_mouse(dx/80, dy/80)
 
@@ -158,47 +158,47 @@ class Controller:
 
       # Keypress
       elif(protocol == 0x04):
-        #keycode = ord(message[1])
-        print 'Char: '+hex(ord(message[4]))
+        #keycode = message[1]
+        print 'Keyboard: Char = '+hex(message[4])
 
-        if(ord(message[4]) == 0x00):
+        if(message[4] == 0x00):
           pass
         else: 
-          self.type_char(message[4])
+          self.type_char(chr(message[4]))
 
       # Presentation mode
       elif(protocol == 0x05):
-        if(ord(message[1]) == 0x01):
+        if(message[1] == 0x01):
           print 'Presentation mode. Going left.'
           self.type_button(VK_LEFT)
 
-        elif(ord(message[1]) == 0x02):
+        elif(message[1] == 0x02):
           print 'Presentation mode. Going right.'
           self.type_button(VK_RIGHT)
           
       # Media mode
       elif(protocol == 0x06):
-        if(ord(message[1]) == 0x01):
+        if(message[1] == 0x01):
           print 'Media mode. Previous track!'
           self.type_button(VK_PREV_TRACK)
-        elif(ord(message[1]) == 0x02):
+        elif(message[1] == 0x02):
           print 'Media mode. Next track!'
           self.type_button(VK_NEXT_TRACK)
-        elif(ord(message[1]) == 0x03):
+        elif(message[1] == 0x03):
           print 'Media mode. Volume up!'
           self.type_button(VK_VOL_UP)
-        elif(ord(message[1]) == 0x04):
+        elif(message[1] == 0x04):
           print 'Media mode. Vol down!'
           self.type_button(VK_VOL_DOWN)
-        elif(ord(message[1]) == 0x05):
+        elif(message[1] == 0x05):
           print 'Media mode. Mute!'
           self.type_button(VK_MUTE)
-        elif(ord(message[1]) == 0x06):
+        elif(message[1] == 0x06):
           print 'Media mode. Play/pause!'
           self.type_button(VK_PLAY_PAUSE)
 
       else:
-        print 'Unrecognized message. First byte: '+str(ord(message[0]))
+        print 'Unrecognized message. First byte: '+str(message[0])
 
     except Exception, e:
       print 'Error while decoding message ('+str(e)+'). Ignoring and moving on.'
