@@ -14,14 +14,7 @@ MOUSE_SENSIVITY = 1.0
 # or showkey -k (outside X)
 
 # Key codes for special chars
-VK_LEFT = 113 
-VK_RIGHT = 114 
-VK_SPACE = 65
-VK_ENTER = 36
-VK_BACKSPACE = 22
-VK_POINT = 60
-VK_EXCLAM = 10
-VK_QUESTION = 97
+VK_SHIFT = 50
 
 # Arrow keys (For presentation mode)
 VK_LEFT = 113
@@ -35,6 +28,47 @@ VK_MUTE = 121
 VK_VOL_DOWN = 122
 VK_VOL_UP = 123
 
+special_X_keysyms = {
+    ' ' : "space",
+    '\t' : "Tab",
+    '\n' : "Return",  # for some reason this needs to be cr, not lf
+    '\r' : "Return",
+    '\e' : "Escape",
+    '\b' : "BackSpace",
+    '!' : "exclam",
+    '#' : "numbersign",
+    '%' : "percent",
+    '$' : "dollar",
+    '&' : "ampersand",
+    '"' : "quotedbl",
+    '\'' : "apostrophe",
+    '(' : "parenleft",
+    ')' : "parenright",
+    '*' : "asterisk",
+    '=' : "equal",
+    '+' : "plus",
+    ',' : "comma",
+    '-' : "minus",
+    '.' : "period",
+    '/' : "slash",
+    ':' : "colon",
+    ';' : "semicolon",
+    '<' : "less",
+    '>' : "greater",
+    '?' : "question",
+    '@' : "at",
+    '[' : "bracketleft",
+    ']' : "bracketright",
+    '\\' : "backslash",
+    '^' : "asciicircum",
+    '_' : "underscore",
+    '`' : "grave",
+    '{' : "braceleft",
+    '|' : "bar",
+    '}' : "braceright",
+    '~' : "asciitilde"
+}
+
 class Controller:
 
   def __init__(self):
@@ -47,8 +81,25 @@ class Controller:
     self.release_button(keycode)
 
   def type_char(self, char):
-    self.press_button(self.disp.keysym_to_keycode(XK.string_to_keysym(char)))
-    self.release_button(self.disp.keysym_to_keycode(XK.string_to_keysym(char)))
+
+    # Try to get keysym (works for non-special keys, returns 0 otherwise)
+    keysym = XK.string_to_keysym(char)
+
+    if(keysym == 0):
+      keysym = XK.string_to_keysym(special_X_keysyms[char])
+
+    keycode = self.disp.keysym_to_keycode(keysym)
+
+    # Does this char require shift?
+    if(ord(char) >= 0x41 and ord(char) <= 0x51) or "~!@#$%^&*()_+{}|:\"<>?".find(char) >= 0:
+      self.press_button(VK_SHIFT)
+      self.type_button(keycode)
+      self.release_button(VK_SHIFT)
+    else:
+      self.type_button(keycode)
+
+    #self.press_button(self.disp.keysym_to_keycode(XK.string_to_keysym(char)))
+    #self.release_button(self.disp.keysym_to_keycode(XK.string_to_keysym(char)))
 
   def press_button(self, keycode):
     fake_input(self.disp, X.KeyPress, keycode)
@@ -110,20 +161,9 @@ class Controller:
         #keycode = ord(message[1])
         print 'Char: '+hex(ord(message[4]))
 
-        # Enter, space and backspace are special cases...
-        if ord(message[4]) == 0x0a:
-          self.type_button(VK_ENTER)
-        elif ord(message[4]) == 0x20:
-          self.type_button(VK_SPACE)
-        elif ord(message[4]) == 0x08:
-          self.type_button(VK_BACKSPACE)
-        elif ord(message[4]) == 0x2e:
-          self.type_button(VK_POINT)
-        elif ord(message[4]) == 0x21:
-          self.type_button(VK_EXCLAM)
-        elif ord(message[4]) == 0x3f:
-          self.type_button(VK_QUESTION)
-        else:
+        if(ord(message[4]) == 0x00):
+          pass
+        else: 
           self.type_char(message[4])
 
       # Presentation mode
